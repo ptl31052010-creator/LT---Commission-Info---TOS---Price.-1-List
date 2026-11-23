@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linh Thuỳ — Commission Info - TOS - Price List 🌸</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Nunito and Quicksand fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Load FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                        display: ['Quicksand', 'sans-serif'],
+                    },
+                    colors: {
+                        pastel: {
+                            50: '#FFF5F8',
+                            100: '#FFE8F0',
+                            200: '#FFD1E1',
+                            300: '#FFACC9',
+                            400: '#FF7AA8',
+                            500: '#F4538A',
+                            600: '#D93870',
+                        },
+                        cream: '#FFFDFB',
+                        cocoa: '#5C474E',
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 30px -5px rgba(244, 83, 138, 0.12)',
+                        'card': '0 4px 20px -2px rgba(255, 172, 201, 0.25)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Soft pink dot-patterned pastel background */
+        body {
+            background-color: #FFF5F8;
+            background-image:
+                radial-gradient(#FFD1E1 1.5px, transparent 1.5px),
+                radial-gradient(#FFE8F0 1.5px, #FFF5F8 1.5px);
+            background-size: 36px 36px;
+            background-position: 0 0, 18px 18px;
+            color: #5C474E;
+        }
+
+        /* Floating decorative animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-6px) rotate(5deg); }
+        }
+        .animate-float { animation: float 3.5s ease-in-out infinite; }
+        .animate-float-delay { animation: float 4s ease-in-out 1.5s infinite; }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FFF5F8; }
+        ::-webkit-scrollbar-thumb { background: #FFACC9; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #FF7AA8; }
+
+        /* Hide default details disclosure arrow */
+        details summary::-webkit-details-marker { display: none; }
+    </style>
+</head>
+<body class="min-h-screen antialiased selection:bg-pastel-200 selection:text-pastel-600 pb-16">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transform transition-all duration-300 translate-y-20 opacity-0 pointer-events-none">
+        <div class="bg-pastel-500 text-white px-5 py-3 rounded-full shadow-lg flex items-center gap-2.5 text-sm font-bold">
+            <i class="fa-solid fa-heart animate-pulse"></i>
+            <span id="toast-msg">Đã sao chép thành công!</span>
+        </div>
+    </div>
+
+    <main class="max-w-3xl mx-auto px-4 pt-8 sm:pt-12 space-y-8">
+
+        <!-- OWNER CONTROL PANEL (HIDDEN FOR VISITORS; UNLOCKED VIA PIN 3105) -->
+        <div id="owner-panel" class="hidden bg-cream/95 backdrop-blur-sm rounded-[2rem] p-4 sm:p-5 shadow-soft border-2 border-pastel-300 space-y-3.5">
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-pastel-100">
+                <div class="flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-full bg-pastel-100 text-pastel-600 flex items-center justify-center text-xs font-bold">👑</span>
+                    <span class="font-display font-bold text-sm text-cocoa">Chế độ chủ trang — Linh Thuỳ</span>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button type="button" onclick="resetDefaultPrices()" class="text-xs font-bold px-3 py-1 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 transition-colors cursor-pointer">
+                        <i class="fa-solid fa-rotate-left mr-1"></i>Khôi phục giá gốc
+                    </button>
+                    <button type="button" onclick="openChangePinModal()" class="text-xs font-bold px-3 py-1 rounded-full bg-pastel-50 hover:bg-pastel-100 text-pastel-600 border border-pastel-200 transition-colors cursor-pointer">
+                        <i class="fa-solid fa-key mr-1"></i>Đổi mã PIN
+                    </button>
+                    <button type="button" onclick="lockOwnerMode()" class="text-xs font-bold px-3 py-1 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 transition-colors cursor-pointer">
+                        <i class="fa-solid fa-lock mr-1"></i>Khoá lại
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-bold text-cocoa/70 mr-1">Đổi trạng thái:</span>
+                <button type="button" onclick="setStatus('open')" id="owner-btn-open" class="px-3.5 py-1.5 rounded-full text-xs font-display font-bold border transition-all cursor-pointer bg-white border-pastel-200 text-cocoa hover:bg-pastel-50">
+                    OPEN 🌸
+                </button>
+                <button type="button" onclick="setStatus('waitlist')" id="owner-btn-waitlist" class="px-3.5 py-1.5 rounded-full text-xs font-display font-bold border transition-all cursor-pointer bg-white border-pastel-200 text-cocoa hover:bg-pastel-50">
+                    WAITLIST ⏳
+                </button>
+                <button type="button" onclick="setStatus('closed')" id="owner-btn-closed" class="px-3.5 py-1.5 rounded-full text-xs font-display font-bold border transition-all cursor-pointer bg-white border-pastel-200 text-cocoa hover:bg-pastel-50">
+                    CLOSED 💤
+                </button>
+            </div>
+
+            <div class="bg-pastel-50/80 rounded-2xl p-3.5 border border-pastel-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                <p class="text-xs text-cocoa/80 leading-relaxed">
+                    <strong class="text-pastel-600">Chỉnh giá &amp; chia sẻ:</strong> Bấm trực tiếp vào bất kỳ ô giá nào trong mục <strong>Bảng giá</strong> để sửa. Bấm nút bên cạnh để sao chép đường dẫn đã đóng gói cả <strong>trạng thái + bảng giá mới</strong> gửi cho khách nhé!
+                </p>
+                <button type="button" onclick="copyShareableConfigLink()" class="shrink-0 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-pastel-500 hover:bg-pastel-600 text-white font-display font-bold text-xs shadow-sm transition-all cursor-pointer">
+                    <i class="fa-solid fa-link"></i>
+                    <span>Sao chép link trạng thái &amp; giá</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- HEADER -->
+        <header class="relative bg-cream/95 backdrop-blur-sm rounded-[2rem] p-6 sm:p-8 shadow-soft border-2 border-pastel-200 text-center overflow-hidden">
+            <div id="secret-sparkle" class="absolute top-4 left-5 text-pastel-300 text-xl animate-float select-none cursor-default">✦</div>
+            <div class="absolute top-6 right-7 text-pastel-300 text-lg animate-float-delay select-none">♡</div>
+            <div class="absolute bottom-4 left-8 text-pastel-200 text-lg select-none">✿</div>
+            <div class="absolute bottom-5 right-6 text-pastel-300 text-xl animate-float select-none">✧</div>
+
+            <h1 class="font-display text-3xl sm:text-4xl font-extrabold text-cocoa tracking-tight">
+                Linh Thuỳ
+            </h1>
+            <p class="text-xs sm:text-sm font-semibold text-pastel-600 mt-1">
+                Trang Facebook: <span class="font-bold">LT's Art Corner</span> • TikTok: <span class="font-bold">Ena</span>
+            </p>
+            <p class="text-sm sm:text-base text-cocoa/80 mt-2 max-w-md mx-auto leading-relaxed">
+                Chào mừng cậu đến với góc nhỏ nhận vẽ commission của Linh Thuỳ ♡ Cảm ơn cậu đã ghé thăm và ủng hộ nét vẽ của mình nhé!
+            </p>
+
+            <!-- COMMISSION STATUS BADGE (STATIC FOR VISITORS; ONLY OWNER CAN EDIT) -->
+            <div class="mt-4 flex flex-col items-center">
+                <div
+                    id="status-badge"
+                    class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pastel-100 border border-pastel-300 text-pastel-600 font-display font-bold text-sm shadow-sm select-none"
+                >
+                    <span id="status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span id="status-text">COMMISSION: OPEN 🌸</span>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-2.5 mt-5">
+                <a href="#order-section" onclick="showPage('order-section'); return false;" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-pastel-400 hover:bg-pastel-500 text-white text-sm font-bold shadow-sm transition-all hover:-translate-y-0.5">
+                    <i class="fa-brands fa-facebook-messenger"></i> Đặt đơn / Nhắn tin
+                </a>
+                <a href="https://www.facebook.com/share/1A7BTdXFg2/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white hover:bg-pastel-50 text-cocoa border border-pastel-200 text-sm font-bold shadow-sm transition-all hover:-translate-y-0.5">
+                    <i class="fa-brands fa-facebook text-pastel-500"></i> Facebook
+                </a>
+                <a href="https://zalo.me/0965753596" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white hover:bg-pastel-50 text-cocoa border border-pastel-200 text-sm font-bold shadow-sm transition-all hover:-translate-y-0.5">
+                    <i class="fa-brands fa-comment-dots text-pastel-500"></i> Zalo
+                </a>
+            </div>
+
+            <p class="mt-6 text-xs text-cocoa/50">Chọn một mục bên dưới để xem nội dung chi tiết nhé ♡</p>
+        </header>
+
+        <!-- HOME MENU -->
+        <section id="home-menu" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <button type="button" onclick="showPage('price-section')" class="group text-left bg-cream/95 rounded-[2rem] p-6 border-2 border-pastel-200 shadow-soft hover:-translate-y-1 hover:border-pastel-400 transition-all cursor-pointer">
+                <span class="text-3xl">🌷</span>
+                <h2 class="font-display text-lg font-bold text-cocoa mt-3">Bảng giá</h2>
+                <p class="text-sm text-cocoa/65 mt-1">Chibi, Normal, ưu đãi và tranh mẫu Google Drive</p>
+                <span class="inline-block mt-4 text-sm font-bold text-pastel-500">Khám phá →</span>
+            </button>
+            <button type="button" onclick="showPage('tos-section')" class="group text-left bg-cream/95 rounded-[2rem] p-6 border-2 border-pastel-200 shadow-soft hover:-translate-y-1 hover:border-pastel-400 transition-all cursor-pointer">
+                <span class="text-3xl">📜</span>
+                <h2 class="font-display text-lg font-bold text-cocoa mt-3">Điều khoản</h2>
+                <p class="text-sm text-cocoa/65 mt-1">Điều khoản dịch vụ, thanh toán và quy định chỉnh sửa</p>
+                <span class="inline-block mt-4 text-sm font-bold text-pastel-500">Đọc điều khoản →</span>
+            </button>
+            <button type="button" onclick="showPage('order-section')" class="group text-left bg-cream/95 rounded-[2rem] p-6 border-2 border-pastel-200 shadow-soft hover:-translate-y-1 hover:border-pastel-400 transition-all cursor-pointer">
+                <span class="text-3xl">💌</span>
+                <h2 class="font-display text-lg font-bold text-cocoa mt-3">Đặt commission</h2>
+                <p class="text-sm text-cocoa/65 mt-1">Điền thông tin và gửi đơn trực tiếp</p>
+                <span class="inline-block mt-4 text-sm font-bold text-pastel-500">Tạo đơn →</span>
+            </button>
+        </section>
+
+        <!-- PRICE SECTION -->
+        <section id="price-section" class="hidden bg-cream/95 backdrop-blur-sm rounded-[2rem] p-6 sm:p-8 shadow-soft border-2 border-pastel-200">
+            <button type="button" onclick="showHome()" class="mb-5 inline-flex items-center gap-2 text-sm font-bold text-pastel-600 hover:text-pastel-500 cursor-pointer">← Về trang chủ</button>
+
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-pastel-100">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-pastel-400">Danh mục gói vẽ</span>
+                    <h2 class="font-display text-2xl font-bold text-cocoa flex items-center gap-2">
+                        Bảng Giá Chi Tiết <span class="text-xl">🍰</span>
+                    </h2>
+                </div>
+                <span id="price-mode-badge" class="self-start sm:self-auto text-xs font-semibold text-pastel-600 bg-pastel-100 px-3.5 py-1.5 rounded-full border border-pastel-200">
+                    Bảng giá cố định • Đơn vị: VNĐ
+                </span>
+            </div>
+
+            <div class="flex items-center gap-2 mt-5 bg-pastel-50 p-1.5 rounded-2xl border border-pastel-100">
+                <button type="button" onclick="filterPrices('all')" id="tab-all" class="filter-tab flex-1 py-2 px-3 rounded-xl font-display font-bold text-sm bg-white text-pastel-600 shadow-sm transition-all cursor-pointer">
+                    Tất cả
+                </button>
+                <button type="button" onclick="filterPrices('chibi')" id="tab-chibi" class="filter-tab flex-1 py-2 px-3 rounded-xl font-display font-bold text-sm text-cocoa/70 hover:text-pastel-600 transition-all cursor-pointer">
+                    Chibi 🧸
+                </button>
+                <button type="button" onclick="filterPrices('normal')" id="tab-normal" class="filter-tab flex-1 py-2 px-3 rounded-xl font-display font-bold text-sm text-cocoa/70 hover:text-pastel-600 transition-all cursor-pointer">
+                    Normal ✨
+                </button>
+            </div>
+
+            <div id="price-container" class="mt-6 space-y-8">
+                <!-- CHIBI -->
+                <div id="block-chibi" class="space-y-5">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-display text-xl font-bold text-pastel-600 flex items-center gap-2">
+                            <span class="w-7 h-7 rounded-full bg-pastel-100 flex items-center justify-center text-sm">🧸</span>
+                            1. Gói Chibi
+                        </h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Chibi loại 1 -->
+                        <div class="bg-white rounded-3xl p-5 border border-pastel-200 shadow-card">
+                            <div class="flex items-center justify-between mb-3 pb-2 border-b border-pastel-100">
+                                <h4 class="font-display font-bold text-base text-cocoa">Chibi loại 1</h4>
+                                <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-pastel-100 text-pastel-600">1 - 1,5 đầu</span>
+                            </div>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between items-center py-1">
+                                    <span class="text-cocoa/80 font-medium">• Đi nét (Lineart)</span>
+                                    <span class="price-cell font-bold text-pastel-600" data-price-key="c1_line">30k</span>
+                                </div>
+                                <div class="flex justify-between items-center py-1">
+                                    <span class="text-cocoa/80 font-medium">• Tô màu phẳng (Flat colors)</span>
+                                    <span class="price-cell font-bold text-pastel-600" data-price-key="c1_flat">45k</span>
+                                </div>
+                                <div class="flex justify-between items-center py-1">
+                                    <span class="text-cocoa/80 font-medium">• Hoàn thiện đầy đủ (Rendered)</span>
+                                    <span class="price-cell font-bold text-pastel-600" data-price-key="c1_rend">60k</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chibi loại 2 -->
+                        <div class="bg-white rounded-3xl p-5 border border-pastel-200 shadow-card">
+                            <div class="flex items-center justify-between mb-3 pb-2 border-b border-pastel-100">
+                                <h4 class="font-display font-bold text-base text-cocoa">Chibi loại 2</h4>
+                                <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-pastel-100 text-pastel-600">2 đầu</span>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left">
+                                    <thead>
+                                        <tr class="text-[11px] uppercase text-cocoa/50 border-b border-pastel-50">
+                                            <th class="pb-1.5 font-bold">Khung hình</th>
+                                            <th class="pb-1.5 text-center font-bold">Lineart</th>
+                                            <th class="pb-1.5 text-center font-bold">Flat</th>
+                                            <th class="pb-1.5 text-center font-bold">Rendered</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-pastel-50">
+                                        <tr>
+                                            <td class="py-2 font-semibold text-cocoa">Nửa người (Half body)</td>
+                                            <td class="py-2 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c2_hb_line">25k</span></td>
+                                            <td class="py-2 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c2_hb_flat">45k</span></td>
+                                            <td class="py-2 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c2_hb_rend">65k</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 font-semibold text-cocoa">Toàn thân (Full body)</td>
+                                            <td class="py-2 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c2_fb_line">40k</span></td>
+                                            <td class="py-2 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c2_fb_flat">65k</span></td>
+                                            <td class="py-2 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c2_fb_rend">85k</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Chibi loại 3 -->
+                        <div class="bg-white rounded-3xl p-5 border border-pastel-200 shadow-card">
+                            <div class="flex items-center justify-between mb-3 pb-2 border-b border-pastel-100">
+                                <h4 class="font-display font-bold text-base text-cocoa">Chibi loại 3</h4>
+                                <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-pastel-100 text-pastel-600">3 - 4 đầu</span>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left">
+                                    <thead>
+                                        <tr class="text-[11px] uppercase text-cocoa/50 border-b border-pastel-50">
+                                            <th class="pb-1.5 font-bold">Khung hình</th>
+                                            <th class="pb-1.5 text-center font-bold">Lineart</th>
+                                            <th class="pb-1.5 text-center font-bold">Flat</th>
+                                            <th class="pb-1.5 text-center font-bold">Rendered</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-pastel-50">
+                                        <tr>
+                                            <td class="py-2 font-semibold text-cocoa">Ngang ngực (Bust up)</td>
+                                            <td class="py-2 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c3_bu_line">30k</span></td>
+                                            <td class="py-2 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c3_bu_flat">45k</span></td>
+                                            <td class="py-2 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c3_bu_rend">60k</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 font-semibold text-cocoa">Nửa người (Half body)</td>
+                                            <td class="py-2 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c3_hb_line">40k</span></td>
+                                            <td class="py-2 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c3_hb_flat">50k</span></td>
+                                            <td class="py-2 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c3_hb_rend">75k</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 font-semibold text-cocoa">Toàn thân (Full body)</td>
+                                            <td class="py-2 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c3_fb_line">55k</span></td>
+                                            <td class="py-2 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c3_fb_flat">70k</span></td>
+                                            <td class="py-2 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c3_fb_rend">110k</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Chibi loại 4 -->
+                        <div class="bg-white rounded-3xl p-5 border border-pastel-200 shadow-card">
+                            <div class="flex items-center justify-between mb-3 pb-2 border-b border-pastel-100">
+                                <h4 class="font-display font-bold text-base text-cocoa">Chibi loại 4</h4>
+                                <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-pastel-100 text-pastel-600">4,5 - 5 đầu</span>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left">
+                                    <thead>
+                                        <tr class="text-[11px] uppercase text-cocoa/50 border-b border-pastel-50">
+                                            <th class="pb-1.5 font-bold">Khung hình</th>
+                                            <th class="pb-1.5 text-center font-bold">Lineart</th>
+                                            <th class="pb-1.5 text-center font-bold">Flat</th>
+                                            <th class="pb-1.5 text-center font-bold">Rendered</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-pastel-50">
+                                        <tr>
+                                            <td class="py-1.5 font-semibold text-cocoa">Ngang vai (Headshot)</td>
+                                            <td class="py-1.5 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c4_hs_line">25k</span></td>
+                                            <td class="py-1.5 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c4_hs_flat">40k</span></td>
+                                            <td class="py-1.5 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c4_hs_rend">60k</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-1.5 font-semibold text-cocoa">Ngang ngực (Bust up)</td>
+                                            <td class="py-1.5 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c4_bu_line">35k</span></td>
+                                            <td class="py-1.5 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c4_bu_flat">50k</span></td>
+                                            <td class="py-1.5 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c4_bu_rend">75k</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-1.5 font-semibold text-cocoa">Nửa người (Half body)</td>
+                                            <td class="py-1.5 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c4_hb_line">45k</span></td>
+                                            <td class="py-1.5 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c4_hb_flat">60k</span></td>
+                                            <td class="py-1.5 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c4_hb_rend">80k</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-1.5 font-semibold text-cocoa">Ngang gối (Knee up)</td>
+                                            <td class="py-1.5 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c4_ku_line">60k</span></td>
+                                            <td class="py-1.5 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c4_ku_flat">75k</span></td>
+                                            <td class="py-1.5 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c4_ku_rend">110k</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-1.5 font-semibold text-cocoa">Toàn thân (Full body)</td>
+                                            <td class="py-1.5 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c4_fb_line">75k</span></td>
+                                            <td class="py-1.5 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c4_fb_flat">100k</span></td>
+                                            <td class="py-1.5 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="c4_fb_rend">160k</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NORMAL -->
+                <div id="block-normal" class="space-y-5 pt-2">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-display text-xl font-bold text-pastel-600 flex items-center gap-2">
+                            <span class="w-7 h-7 rounded-full bg-pastel-100 flex items-center justify-center text-sm">✨</span>
+                            2. Gói Normal (Tỉ lệ thường)
+                        </h3>
+                    </div>
+
+                    <div class="bg-white rounded-3xl p-5 sm:p-6 border border-pastel-200 shadow-card overflow-x-auto">
+                        <table class="w-full text-sm sm:text-base text-left">
+                            <thead>
+                                <tr class="text-xs uppercase tracking-wider text-pastel-600 bg-pastel-50">
+                                    <th class="py-3 px-3 rounded-l-xl font-display font-bold">Khung hình</th>
+                                    <th class="py-3 px-3 text-center font-display font-bold">Lineart</th>
+                                    <th class="py-3 px-3 text-center font-display font-bold">Flat colors</th>
+                                    <th class="py-3 px-3 text-center rounded-r-xl font-display font-bold">Rendered</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-pastel-100">
+                                <tr class="hover:bg-pastel-50/50 transition-colors">
+                                    <td class="py-3 px-3 font-bold text-cocoa">Ngang vai (Headshot)</td>
+                                    <td class="py-3 px-3 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="n_hs_line">60k</span></td>
+                                    <td class="py-3 px-3 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="n_hs_flat">90k</span></td>
+                                    <td class="py-3 px-3 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="n_hs_rend">150k</span></td>
+                                </tr>
+                                <tr class="hover:bg-pastel-50/50 transition-colors">
+                                    <td class="py-3 px-3 font-bold text-cocoa">Ngang ngực (Bust up)</td>
+                                    <td class="py-3 px-3 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="n_bu_line">80k</span></td>
+                                    <td class="py-3 px-3 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="n_bu_flat">120k</span></td>
+                                    <td class="py-3 px-3 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="n_bu_rend">180k</span></td>
+                                </tr>
+                                <tr class="hover:bg-pastel-50/50 transition-colors">
+                                    <td class="py-3 px-3 font-bold text-cocoa">Nửa người (Half body)</td>
+                                    <td class="py-3 px-3 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="n_hb_line">100k</span></td>
+                                    <td class="py-3 px-3 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="n_hb_flat">160k</span></td>
+                                    <td class="py-3 px-3 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="n_hb_rend">280k</span></td>
+                                </tr>
+                                <tr class="hover:bg-pastel-50/50 transition-colors">
+                                    <td class="py-3 px-3 font-bold text-cocoa">Ngang gối (Knee up)</td>
+                                    <td class="py-3 px-3 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="n_ku_line">150k</span></td>
+                                    <td class="py-3 px-3 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="n_ku_flat">200k</span></td>
+                                    <td class="py-3 px-3 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="n_ku_rend">280k</span></td>
+                                </tr>
+                                <tr class="hover:bg-pastel-50/50 transition-colors">
+                                    <td class="py-3 px-3 font-bold text-cocoa">Toàn thân (Full body)</td>
+                                    <td class="py-3 px-3 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="n_fb_line">180k</span></td>
+                                    <td class="py-3 px-3 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="n_fb_flat">230k</span></td>
+                                    <td class="py-3 px-3 text-center"><span class="price-cell font-bold text-pastel-600" data-price-key="n_fb_rend">350k</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- LƯU Ý (FULL TEXT, UPDATED SURCHARGE NOTE) -->
+                <div class="relative bg-gradient-to-br from-pastel-100/90 to-pastel-50 rounded-3xl p-5 sm:p-6 border-2 border-pastel-200">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-xl">🌸</span>
+                        <h3 class="font-display text-lg font-bold text-cocoa">LƯU Ý</h3>
+                    </div>
+                    <ul class="space-y-2.5 text-sm text-cocoa/90">
+                        <li class="flex items-start gap-2.5">
+                            <span class="text-pastel-500 font-bold">•</span>
+                            <div>
+                                <span class="font-bold text-pastel-600">Couple sẽ được giảm:</span>
+                                <span class="block sm:inline sm:ml-1">Lineart giảm 10k, Flat colors giảm 15k, Rendered giảm 20k - 25k.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <span class="text-pastel-500 font-bold">•</span>
+                            <span>Phụ phí: background đơn giản (trong khả năng của artist) giá giao động từ <strong class="text-pastel-600">20k-50k</strong>. Thêm phụ kiện chi tiết giá giao động từ <strong class="text-pastel-600">10k-50k</strong>.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <span class="text-pastel-500 font-bold">•</span>
+                            <span>Đối với những đơn trên <strong class="text-pastel-600">300k</strong> sẽ được tặng quà nho nhỏ nhé ♡</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- SAMPLE LINK AT THE VERY END OF PRICE LIST -->
+                <div class="pt-2 flex justify-center">
+                    <a href="https://drive.google.com/drive/folders/1Csrru6_esf6YgGGuUmqhJRS_44j7cMXW" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-pastel-500 hover:bg-pastel-600 text-white font-display font-bold text-sm sm:text-base shadow-md transition-all hover:-translate-y-0.5">
+                        <i class="fa-brands fa-google-drive"></i>
+                        <span>Xem tranh mẫu (Google Drive)</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- TOS SECTION (FULL TEXT WITHOUT ABBREVIATIONS) -->
+        <section id="tos-section" class="hidden bg-cream/95 backdrop-blur-sm rounded-[2rem] p-6 sm:p-8 shadow-soft border-2 border-pastel-200">
+            <button type="button" onclick="showHome()" class="mb-5 inline-flex items-center gap-2 text-sm font-bold text-pastel-600 hover:text-pastel-500 cursor-pointer">← Về trang chủ</button>
+
+            <div class="pb-5 border-b border-pastel-100">
+                <span class="text-xs font-bold uppercase tracking-wider text-pastel-400">Điều khoản dịch vụ</span>
+                <h2 class="font-display text-2xl font-bold text-cocoa flex items-center gap-2">
+                    Điều Khoản Dịch Vụ (TOS) <span class="text-xl">📜</span>
+                </h2>
+                <p class="text-sm text-cocoa/75 mt-1">
+                    Vui lòng đọc kỹ các quy định dưới đây trước khi đặt đơn để quá trình hợp tác diễn ra suôn sẻ nhất nhé!
+                </p>
+            </div>
+
+            <div class="mt-6 space-y-3.5">
+                <!-- 1. Mô tả yêu cầu (Brief) -->
+                <details open class="group bg-white rounded-2xl border border-pastel-200 shadow-card overflow-hidden">
+                    <summary class="flex items-center justify-between p-4 sm:p-5 cursor-pointer font-display font-bold text-cocoa select-none hover:bg-pastel-50/60 transition-colors">
+                        <span class="flex items-center gap-3">
+                            <span class="w-7 h-7 rounded-full bg-pastel-100 text-pastel-600 text-xs flex items-center justify-center font-bold">1</span>
+                            Mô tả yêu cầu (Brief) bao gồm
+                        </span>
+                        <i class="fa-solid fa-chevron-down text-xs text-pastel-400 group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <div class="px-5 pb-5 pt-1 text-sm text-cocoa/85 space-y-1.5 border-t border-pastel-50">
+                        <p>• Phong cách, ý tưởng (concept), màu sắc</p>
+                        <p>• Hình ảnh kèm theo</p>
+                        <p>• Mô tả yêu cầu (brief) càng chi tiết càng tốt nhé</p>
+                        <p class="font-semibold text-pastel-600">• Mô tả yêu cầu không chi tiết, không rõ ràng xin phép không động bút</p>
+                    </div>
+                </details>
+
+                <!-- 2. Quy định chung & Bản quyền -->
+                <details class="group bg-white rounded-2xl border border-pastel-200 shadow-card overflow-hidden">
+                    <summary class="flex items-center justify-between p-4 sm:p-5 cursor-pointer font-display font-bold text-cocoa select-none hover:bg-pastel-50/60 transition-colors">
+                        <span class="flex items-center gap-3">
+                            <span class="w-7 h-7 rounded-full bg-pastel-100 text-pastel-600 text-xs flex items-center justify-center font-bold">2</span>
+                            Quy định chung &amp; Bản quyền
+                        </span>
+                        <i class="fa-solid fa-chevron-down text-xs text-pastel-400 group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <div class="px-5 pb-5 pt-1 text-sm text-cocoa/85 space-y-2 border-t border-pastel-50">
+                        <p>• Mình có quyền từ chối nhận đơn nếu cảm thấy thiết kế nhân vật hoặc yêu cầu không phù hợp với phong cách và khả năng của mình.</p>
+                        <p>• Tranh hoàn thiện thuộc bản quyền của artist (<span class="font-semibold text-pastel-600">Linh Thuỳ</span>). Mình có quyền đăng tải tranh lên mạng xã hội hoặc bộ sưu tập cá nhân kèm chữ ký (watermark). Nếu bạn cần giữ bí mật đến một ngày cụ thể, hãy báo trước cho mình nhé.</p>
+                        <p>• Khi sử dụng tranh, vui lòng ghi nguồn (credit) <span class="font-semibold text-pastel-600">Linh Thuỳ</span> giúp mình nha.</p>
+                        <p>• Thời hạn hoàn thành (deadline) dao động từ nửa tháng đến khoảng 1 tháng rưỡi. Với trường hợp tranh nhiều chi tiết, artist sẽ trao đổi lại với bạn nhé.</p>
+                    </div>
+                </details>
+
+                <!-- 3. Nhận vẽ & Không nhận vẽ -->
+                <details class="group bg-white rounded-2xl border border-pastel-200 shadow-card overflow-hidden">
+                    <summary class="flex items-center justify-between p-4 sm:p-5 cursor-pointer font-display font-bold text-cocoa select-none hover:bg-pastel-50/60 transition-colors">
+                        <span class="flex items-center gap-3">
+                            <span class="w-7 h-7 rounded-full bg-pastel-100 text-pastel-600 text-xs flex items-center justify-center font-bold">3</span>
+                            Nhận vẽ (Will draw) &amp; Không nhận (Won't draw)
+                        </span>
+                        <i class="fa-solid fa-chevron-down text-xs text-pastel-400 group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <div class="px-5 pb-5 pt-2 text-sm text-cocoa/85 border-t border-pastel-50 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-emerald-50/70 rounded-2xl p-4 border border-emerald-100">
+                            <div class="font-display font-bold text-emerald-700 mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-circle-check"></i> Nhận vẽ (Will draw)
+                            </div>
+                            <ul class="space-y-1.5 text-cocoa/85">
+                                <li>✓ Nhân vật sáng tạo riêng (Original Character), Fanart</li>
+                                <li>✓ Couple (Nam/Nữ, Boy Love, Girl Love)</li>
+                                <li>✓ Nhân vật tai thú, đuôi (Kemonomimi)</li>
+                                <li>✓ Trang phục hiện đại, Lolita, đồng phục...</li>
+                            </ul>
+                        </div>
+                        <div class="bg-rose-50/70 rounded-2xl p-4 border border-rose-100">
+                            <div class="font-display font-bold text-rose-600 mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-circle-xmark"></i> Không nhận (Won't draw)
+                            </div>
+                            <ul class="space-y-1.5 text-cocoa/85">
+                                <li>✕ Nội dung nhạy cảm / 18+, máu me kinh dị</li>
+                                <li>✕ Máy móc phức tạp (Mecha), thú nhân (Furry)</li>
+                                <li>✕ Người già, cơ bắp quá đô, tả thực</li>
+                                <li>✕ Background kiến trúc phức tạp</li>
+                            </ul>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- 4. Thanh toán & Hoàn tiền -->
+                <details class="group bg-white rounded-2xl border border-pastel-200 shadow-card overflow-hidden">
+                    <summary class="flex items-center justify-between p-4 sm:p-5 cursor-pointer font-display font-bold text-cocoa select-none hover:bg-pastel-50/60 transition-colors">
+                        <span class="flex items-center gap-3">
+                            <span class="w-7 h-7 rounded-full bg-pastel-100 text-pastel-600 text-xs flex items-center justify-center font-bold">4</span>
+                            Thanh toán (Payment) &amp; Hoàn tiền
+                        </span>
+                        <i class="fa-solid fa-chevron-down text-xs text-pastel-400 group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <div class="px-5 pb-5 pt-1 text-sm text-cocoa/85 space-y-2 border-t border-pastel-50">
+                        <p>• Thanh toán qua chuyển khoản ngân hàng hoặc ví điện tử Momo.</p>
+                        <p>• Khách hàng vui lòng <span class="font-bold text-pastel-600">cọc trước 50%</span> (hoặc thanh toán 100%) ngay sau khi duyệt bản phác thảo (sketch) để mình tiến hành đi nét và lên màu.</p>
+                        <p>• <span class="font-bold text-rose-500">Không hoàn tiền</span> sau khi đã chốt bản phác thảo. Trường hợp mình có việc đột xuất không thể hoàn thành đơn, mình sẽ hoàn lại 100% số tiền bạn đã chuyển.</p>
+                        <p>• Thời hạn chuyển khoản là <strong class="text-pastel-600">48 giờ</strong>.</p>
+                    </div>
+                </details>
+
+                <!-- 5. Quy định chỉnh sửa -->
+                <details class="group bg-white rounded-2xl border border-pastel-200 shadow-card overflow-hidden">
+                    <summary class="flex items-center justify-between p-4 sm:p-5 cursor-pointer font-display font-bold text-cocoa select-none hover:bg-pastel-50/60 transition-colors">
+                        <span class="flex items-center gap-3">
+                            <span class="w-7 h-7 rounded-full bg-pastel-100 text-pastel-600 text-xs flex items-center justify-center font-bold">5</span>
+                            Quy định chỉnh sửa (Editing / Revision)
+                        </span>
+                        <i class="fa-solid fa-chevron-down text-xs text-pastel-400 group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <div class="px-5 pb-5 pt-1 text-sm text-cocoa/85 space-y-2 border-t border-pastel-50">
+                        <p>• <span class="font-bold text-pastel-600">Bước phác thảo (Sketch):</span> Hỗ trợ sửa miễn phí tối đa <b>2 - 3 lần</b> (dáng, biểu cảm, bố cục).</p>
+                        <p>• <span class="font-bold text-pastel-600">Bước đi nét / Lên màu:</span> Chỉ hỗ trợ sửa các lỗi nhỏ (sai màu mắt hoặc tóc, thiếu phụ kiện nhỏ so với hình mẫu). Yêu cầu đổi dáng hoặc sửa lớn ở bước này sẽ tính thêm phụ phí.</p>
+                        <p>• Nếu thay đổi mô tả yêu cầu <strong class="text-pastel-600">&gt; 80%</strong> sẽ tính là 1 commission mới.</p>
+                        <p>• Sau khi nhận tệp hoàn thiện cuối cùng (file final) mình không nhận sửa.</p>
+                    </div>
+                </details>
+
+                <!-- 6. Sử dụng thương mại -->
+                <details class="group bg-white rounded-2xl border border-pastel-200 shadow-card overflow-hidden">
+                    <summary class="flex items-center justify-between p-4 sm:p-5 cursor-pointer font-display font-bold text-cocoa select-none hover:bg-pastel-50/60 transition-colors">
+                        <span class="flex items-center gap-3">
+                            <span class="w-7 h-7 rounded-full bg-pastel-100 text-pastel-600 text-xs flex items-center justify-center font-bold">6</span>
+                            Sử dụng thương mại (Commercial Use)
+                        </span>
+                        <i class="fa-solid fa-chevron-down text-xs text-pastel-400 group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <div class="px-5 pb-5 pt-1 text-sm text-cocoa/85 space-y-2 border-t border-pastel-50">
+                        <p>• Bảng giá niêm yết trên trang áp dụng cho mục đích <span class="font-semibold text-pastel-600">sử dụng cá nhân</span> (làm ảnh đại diện, ảnh bìa, in tặng bạn bè số lượng nhỏ không bán).</p>
+                        <p>• Nếu dùng cho mục đích thương mại (in ấn phẩm để bán, làm tài nguyên phát sóng trực tiếp/VTuber, bìa truyện kiếm lợi nhuận...), giá sẽ nhân hệ số <span class="font-bold text-pastel-600">x1.5 đến x2</span> giá gốc tùy quy mô.</p>
+                    </div>
+                </details>
+
+                <!-- 7. Tệp bàn giao (File) -->
+                <details class="group bg-white rounded-2xl border border-pastel-200 shadow-card overflow-hidden">
+                    <summary class="flex items-center justify-between p-4 sm:p-5 cursor-pointer font-display font-bold text-cocoa select-none hover:bg-pastel-50/60 transition-colors">
+                        <span class="flex items-center gap-3">
+                            <span class="w-7 h-7 rounded-full bg-pastel-100 text-pastel-600 text-xs flex items-center justify-center font-bold">7</span>
+                            Tệp bàn giao (File)
+                        </span>
+                        <i class="fa-solid fa-chevron-down text-xs text-pastel-400 group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <div class="px-5 pb-5 pt-1 text-sm text-cocoa/85 space-y-2 border-t border-pastel-50">
+                        <p>• Tệp tranh được gửi sau khi cậu thanh toán <strong class="text-pastel-600">100%</strong>.</p>
+                        <p>• Tệp tranh lưu trữ <strong class="text-pastel-600">1 tháng</strong> sau khi gửi, sau đó mình không chịu trách nhiệm về tệp tranh nữa.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- ORDER SECTION -->
+        <section id="order-section" class="hidden bg-cream/95 backdrop-blur-sm rounded-[2rem] p-6 sm:p-8 shadow-soft border-2 border-pastel-200">
+            <button type="button" onclick="showHome()" class="mb-5 inline-flex items-center gap-2 text-sm font-bold text-pastel-600 hover:text-pastel-500 cursor-pointer">← Về trang chủ</button>
+
+            <div class="pb-5 border-b border-pastel-100">
+                <span class="text-xs font-bold uppercase tracking-wider text-pastel-400">Biểu mẫu đặt đơn</span>
+                <h2 class="font-display text-2xl font-bold text-cocoa flex items-center gap-2">
+                    Mẫu Đặt Commission <span class="text-xl">💌</span>
+                </h2>
+                <p class="text-sm text-cocoa/75 mt-1">
+                    Điền thông tin rồi bấm <strong>Hoàn tất</strong> — đơn sẽ gửi thẳng về Gmail của mình nhé!
+                </p>
+            </div>
+
+            <form id="comm-form" action="https://formspree.io/f/mnpddqwr" method="POST" class="mt-6 space-y-4">
+                <input type="hidden" name="_subject" value="Đơn đặt Commission mới từ website Linh Thuỳ!">
+                <input type="hidden" name="_replyto" value="ptl31052010@gmail.com">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-cocoa/70 mb-1.5">Tên hoặc biệt danh của cậu *</label>
+                        <input type="text" name="name" required placeholder="Tên để mình tiện xưng hô..." class="w-full px-4 py-2.5 rounded-2xl bg-white border border-pastel-200 focus:border-pastel-400 focus:outline-none text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-cocoa/70 mb-1.5">Đường dẫn Facebook / TikTok / Zalo liên hệ *</label>
+                        <input type="text" name="contact" required placeholder="Đường dẫn liên hệ hoặc số điện thoại..." class="w-full px-4 py-2.5 rounded-2xl bg-white border border-pastel-200 focus:border-pastel-400 focus:outline-none text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-cocoa/70 mb-1.5">Gói vẽ &amp; Mức độ hoàn thiện *</label>
+                    <input type="text" name="package" required placeholder="Ví dụ: Chibi loại 2 - Toàn thân - Rendered hoặc Normal ngang ngực..." class="w-full px-4 py-2.5 rounded-2xl bg-white border border-pastel-200 focus:border-pastel-400 focus:outline-none text-sm">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-cocoa/70 mb-1.5">Mô tả chi tiết (Phong cách, ý tưởng, màu sắc, đường dẫn ảnh mẫu...) *</label>
+                    <textarea name="brief" rows="4" required placeholder="Mô tả chi tiết phong cách, ý tưởng, màu sắc, đường dẫn ảnh mẫu nhân vật..." class="w-full px-4 py-2.5 rounded-2xl bg-white border border-pastel-200 focus:border-pastel-400 focus:outline-none text-sm"></textarea>
+                </div>
+
+                <div class="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-2xl bg-pastel-500 hover:bg-pastel-600 text-white font-display font-bold text-sm shadow-md transition-all hover:-translate-y-0.5 cursor-pointer">
+                        <span>Hoàn tất ✨</span>
+                    </button>
+                    <p id="form-status" class="text-xs font-semibold text-pastel-600" aria-live="polite" role="status"></p>
+                </div>
+            </form>
+
+            <!-- BACKUP CONTACT -->
+            <div class="mt-8 pt-6 border-t border-pastel-100 text-xs sm:text-sm text-cocoa/85 space-y-1.5 bg-pastel-50/70 rounded-2xl p-4">
+                <p class="font-semibold text-cocoa">Nếu bạn không liên hệ được qua Facebook bạn có thể liên hệ qua</p>
+                <p>
+                    <span class="font-bold text-pastel-600">Gmail:</span>
+                    <button type="button" onclick="copyText('ptl31052010@gmail.com')" class="underline hover:text-pastel-500 cursor-pointer">ptl31052010@gmail.com</button>
+                </p>
+                <p>
+                    <span class="font-bold text-pastel-600">Số điện thoại:</span>
+                    <button type="button" onclick="copyText('0965753596')" class="underline hover:text-pastel-500 cursor-pointer">0965753596</button>
+                </p>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="text-center text-xs text-cocoa/60 space-y-2 pt-2">
+            <p class="pt-1">Made with ♡ for <span class="font-bold text-pastel-500">Linh Thuỳ</span></p>
+            <p class="inline-flex items-center justify-center gap-1.5">
+                <span>© 2026 LT's Art Corner • Ena. All rights reserved.</span>
+                <button type="button" onclick="openPinModal()" title="Dành riêng cho Linh Thuỳ" aria-label="Mở khoá quản trị" class="opacity-35 hover:opacity-90 transition-opacity cursor-pointer text-[11px] px-1">
+                    🔒
+                </button>
+            </p>
+        </footer>
+    </main>
+
+    <!-- OWNER PIN MODAL -->
+    <div id="pin-modal" class="hidden fixed inset-0 z-50 bg-cocoa/40 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-cream rounded-[2rem] p-6 w-full max-w-xs border-2 border-pastel-200 shadow-soft text-center space-y-4">
+            <div class="w-12 h-12 rounded-full bg-pastel-100 text-pastel-500 flex items-center justify-center mx-auto text-lg">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <div>
+                <h3 id="pin-modal-title" class="font-display text-lg font-bold text-cocoa">Xác nhận chủ trang</h3>
+                <p id="pin-modal-desc" class="text-xs text-cocoa/70 mt-1">Nhập mã PIN của Linh Thuỳ để chỉnh trạng thái và bảng giá nhé ♡</p>
+            </div>
+            <div>
+                <input id="pin-input" type="password" inputmode="numeric" maxlength="12" placeholder="Nhập mã PIN..." class="w-full px-4 py-2.5 rounded-2xl bg-white border border-pastel-200 focus:border-pastel-400 focus:outline-none text-center font-display font-bold tracking-widest text-sm">
+                <p id="pin-error" class="hidden text-xs font-bold text-rose-500 mt-1.5">Mã PIN chưa đúng rồi cậu ơi!</p>
+            </div>
+            <div class="flex items-center gap-2 pt-1">
+                <button type="button" onclick="closePinModal()" class="flex-1 py-2.5 rounded-2xl bg-pastel-50 hover:bg-pastel-100 text-cocoa/80 font-display font-bold text-xs cursor-pointer transition-colors">
+                    Huỷ
+                </button>
+                <button type="button" onclick="submitPinModal()" class="flex-1 py-2.5 rounded-2xl bg-pastel-500 hover:bg-pastel-600 text-white font-display font-bold text-xs shadow-sm cursor-pointer transition-colors">
+                    Xác nhận
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- OWNER EDIT SINGLE PRICE MODAL -->
+    <div id="price-edit-modal" class="hidden fixed inset-0 z-50 bg-cocoa/40 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-cream rounded-[2rem] p-6 w-full max-w-xs border-2 border-pastel-200 shadow-soft text-center space-y-4">
+            <div class="w-12 h-12 rounded-full bg-pastel-100 text-pastel-500 flex items-center justify-center mx-auto text-lg">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </div>
+            <div>
+                <h3 class="font-display text-lg font-bold text-cocoa">Chỉnh sửa mức giá</h3>
+                <p id="price-edit-label" class="text-xs text-cocoa/70 mt-1">Nhập giá mới cho mục này (ví dụ: 65k, 120k...)</p>
+            </div>
+            <div>
+                <input id="price-edit-input" type="text" maxlength="20" placeholder="Ví dụ: 50k" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-pastel-200 focus:border-pastel-400 focus:outline-none text-center font-display font-bold text-sm text-pastel-600">
+            </div>
+            <div class="flex items-center gap-2 pt-1">
+                <button type="button" onclick="closePriceEditModal()" class="flex-1 py-2.5 rounded-2xl bg-pastel-50 hover:bg-pastel-100 text-cocoa/80 font-display font-bold text-xs cursor-pointer transition-colors">
+                    Huỷ
+                </button>
+                <button type="button" onclick="saveEditedPrice()" class="flex-1 py-2.5 rounded-2xl bg-pastel-500 hover:bg-pastel-600 text-white font-display font-bold text-xs shadow-sm cursor-pointer transition-colors">
+                    Lưu giá
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STATUS_CONFIG = {
+            open: { text: 'COMMISSION: OPEN 🌸', dot: 'bg-emerald-400 animate-ping' },
+            waitlist: { text: 'COMMISSION: WAITLIST ⏳', dot: 'bg-amber-400 animate-pulse' },
+            closed: { text: 'COMMISSION: CLOSED 💤', dot: 'bg-rose-400' }
+        };
+
+        const DEFAULT_PRICES = {
+            c1_line: '30k', c1_flat: '45k', c1_rend: '60k',
+            c2_hb_line: '25k', c2_hb_flat: '45k', c2_hb_rend: '65k',
+            c2_fb_line: '40k', c2_fb_flat: '65k', c2_fb_rend: '85k',
+            c3_bu_line: '30k', c3_bu_flat: '45k', c3_bu_rend: '60k',
+            c3_hb_line: '40k', c3_hb_flat: '50k', c3_hb_rend: '75k',
+            c3_fb_line: '55k', c3_fb_flat: '70k', c3_fb_rend: '110k',
+            c4_hs_line: '25k', c4_hs_flat: '40k', c4_hs_rend: '60k',
+            c4_bu_line: '35k', c4_bu_flat: '50k', c4_bu_rend: '75k',
+            c4_hb_line: '45k', c4_hb_flat: '60k', c4_hb_rend: '80k',
+            c4_ku_line: '60k', c4_ku_flat: '75k', c4_ku_rend: '110k',
+            c4_fb_line: '75k', c4_fb_flat: '100k', c4_fb_rend: '160k',
+            n_hs_line: '60k', n_hs_flat: '90k', n_hs_rend: '150k',
+            n_bu_line: '80k', n_bu_flat: '120k', n_bu_rend: '180k',
+            n_hb_line: '100k', n_hb_flat: '160k', n_hb_rend: '280k',
+            n_ku_line: '150k', n_ku_flat: '200k', n_ku_rend: '280k',
+            n_fb_line: '180k', n_fb_flat: '230k', n_fb_rend: '350k'
+        };
+
+        const STORAGE_STATUS_KEY = 'linhthuy_comm_status';
+        const STORAGE_PRICES_KEY = 'linhthuy_comm_prices';
+        const STORAGE_PIN_KEY = 'linhthuy_owner_pin';
+        const SESSION_OWNER_KEY = 'linhthuy_owner_unlocked';
+        const DEFAULT_PIN = '3105';
+
+        let currentStatus = 'open';
+        let currentPrices = { ...DEFAULT_PRICES };
+        let pinModalMode = 'unlock';
+        let activePriceKey = null;
+
+        function isOwnerUnlocked() {
+            try {
+                return sessionStorage.getItem(SESSION_OWNER_KEY) === 'true';
+            } catch {
+                return false;
+            }
+        }
+
+        function getOwnerPin() {
+            try {
+                return localStorage.getItem(STORAGE_PIN_KEY) || DEFAULT_PIN;
+            } catch {
+                return DEFAULT_PIN;
+            }
+        }
+
+        function encodePricesToParam(pricesObj) {
+            try {
+                const diffs = {};
+                Object.keys(DEFAULT_PRICES).forEach(k => {
+                    if (pricesObj[k] && pricesObj[k] !== DEFAULT_PRICES[k]) {
+                        diffs[k] = pricesObj[k];
+                    }
+                });
+                if (Object.keys(diffs).length === 0) return '';
+                const json = JSON.stringify(diffs);
+                return btoa(unescape(encodeURIComponent(json)));
+            } catch {
+                return '';
+            }
+        }
+
+        function decodePricesFromParam(paramStr) {
+            try {
+                if (!paramStr) return null;
+                const json = decodeURIComponent(escape(atob(paramStr)));
+                const parsed = JSON.parse(json);
+                return parsed && typeof parsed === 'object' ? parsed : null;
+            } catch {
+                return null;
+            }
+        }
+
+        function renderAllPrices() {
+            const unlocked = isOwnerUnlocked();
+            document.querySelectorAll('.price-cell').forEach(el => {
+                const key = el.getAttribute('data-price-key');
+                if (!key) return;
+                el.textContent = currentPrices[key] || DEFAULT_PRICES[key] || '';
+                if (unlocked) {
+                    el.classList.add('cursor-pointer', 'underline', 'decoration-dotted', 'decoration-pastel-400', 'bg-pastel-50', 'px-2', 'py-0.5', 'rounded-lg', 'hover:bg-pastel-100', 'transition-colors');
+                    el.title = 'Bấm để sửa giá này';
+                } else {
+                    el.classList.remove('cursor-pointer', 'underline', 'decoration-dotted', 'decoration-pastel-400', 'bg-pastel-50', 'px-2', 'py-0.5', 'rounded-lg', 'hover:bg-pastel-100', 'transition-colors');
+                    el.removeAttribute('title');
+                }
+            });
+
+            const badge = document.getElementById('price-mode-badge');
+            if (badge) {
+                badge.textContent = unlocked
+                    ? 'Chế độ chỉnh sửa: Bấm vào giá để đổi • Đơn vị: VNĐ'
+                    : 'Bảng giá cố định • Đơn vị: VNĐ';
+            }
+        }
+
+        function applyStatusUI(statusKey) {
+            const key = STATUS_CONFIG[statusKey] ? statusKey : 'open';
+            currentStatus = key;
+            const cfg = STATUS_CONFIG[key];
+            const textEl = document.getElementById('status-text');
+            const dotEl = document.getElementById('status-dot');
+            if (textEl) textEl.textContent = cfg.text;
+            if (dotEl) dotEl.className = 'w-2.5 h-2.5 rounded-full ' + cfg.dot;
+
+            ['open', 'waitlist', 'closed'].forEach(k => {
+                const btn = document.getElementById('owner-btn-' + k);
+                if (!btn) return;
+                if (k === key) {
+                    btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-display font-bold border transition-all cursor-pointer bg-pastel-500 border-pastel-500 text-white shadow-sm';
+                } else {
+                    btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-display font-bold border transition-all cursor-pointer bg-white border-pastel-200 text-cocoa hover:bg-pastel-50';
+                }
+            });
+        }
+
+        function initAppState() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const urlStatus = (params.get('status') || '').toLowerCase();
+                const savedStatus = localStorage.getItem(STORAGE_STATUS_KEY);
+
+                if (STATUS_CONFIG[urlStatus]) {
+                    applyStatusUI(urlStatus);
+                } else if (savedStatus && STATUS_CONFIG[savedStatus]) {
+                    applyStatusUI(savedStatus);
+                } else {
+                    applyStatusUI('open');
+                }
+
+                // Load prices: URL param takes precedence for visitors, else localStorage, else defaults
+                const urlPrices = decodePricesFromParam(params.get('prices'));
+                const savedPricesRaw = localStorage.getItem(STORAGE_PRICES_KEY);
+                const savedPrices = savedPricesRaw ? JSON.parse(savedPricesRaw) : null;
+
+                currentPrices = {
+                    ...DEFAULT_PRICES,
+                    ...(savedPrices || {}),
+                    ...(urlPrices || {})
+                };
+
+                if (isOwnerUnlocked()) {
+                    document.getElementById('owner-panel')?.classList.remove('hidden');
+                }
+            } catch {
+                applyStatusUI('open');
+                currentPrices = { ...DEFAULT_PRICES };
+            }
+            renderAllPrices();
+        }
+
+        function setStatus(newStatus) {
+            if (!STATUS_CONFIG[newStatus] || !isOwnerUnlocked()) return;
+            applyStatusUI(newStatus);
+            try {
+                localStorage.setItem(STORAGE_STATUS_KEY, newStatus);
+            } catch {}
+            showToast('Đã đổi trạng thái sang ' + STATUS_CONFIG[newStatus].text);
+        }
+
+        function copyShareableConfigLink() {
+            try {
+                const url = new URL(window.location.href);
+                url.searchParams.set('status', currentStatus);
+                const encodedPrices = encodePricesToParam(currentPrices);
+                if (encodedPrices) {
+                    url.searchParams.set('prices', encodedPrices);
+                } else {
+                    url.searchParams.delete('prices');
+                }
+                copyText(url.toString());
+            } catch {
+                const base = window.location.href.split('?')[0].split('#')[0];
+                const encodedPrices = encodePricesToParam(currentPrices);
+                const suffix = encodedPrices ? `&prices=${encodeURIComponent(encodedPrices)}` : '';
+                copyText(`${base}?status=${currentStatus}${suffix}`);
+            }
+        }
+
+        // Price cell click handler (Owner only)
+        document.getElementById('price-container')?.addEventListener('click', (e) => {
+            const cell = e.target.closest('.price-cell');
+            if (!cell || !isOwnerUnlocked()) return;
+            const key = cell.getAttribute('data-price-key');
+            if (!key) return;
+            activePriceKey = key;
+            const input = document.getElementById('price-edit-input');
+            input.value = currentPrices[key] || '';
+            document.getElementById('price-edit-modal').classList.remove('hidden');
+            setTimeout(() => {
+                input.focus();
+                input.select();
+            }, 50);
+        });
+
+        function closePriceEditModal() {
+            document.getElementById('price-edit-modal').classList.add('hidden');
+            activePriceKey = null;
+        }
+
+        function saveEditedPrice() {
+            if (!activePriceKey || !isOwnerUnlocked()) return;
+            const val = (document.getElementById('price-edit-input').value || '').trim();
+            if (!val) {
+                showToast('Vui lòng nhập mức giá hợp lệ!');
+                return;
+            }
+            currentPrices[activePriceKey] = val;
+            try {
+                localStorage.setItem(STORAGE_PRICES_KEY, JSON.stringify(currentPrices));
+            } catch {}
+            renderAllPrices();
+            closePriceEditModal();
+            showToast('Đã cập nhật giá thành ' + val + ' ♡');
+        }
+
+        function resetDefaultPrices() {
+            if (!isOwnerUnlocked()) return;
+            currentPrices = { ...DEFAULT_PRICES };
+            try {
+                localStorage.removeItem(STORAGE_PRICES_KEY);
+            } catch {}
+            renderAllPrices();
+            showToast('Đã khôi phục toàn bộ bảng giá gốc!');
+        }
+
+        document.getElementById('price-edit-input')?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                saveEditedPrice();
+            } else if (e.key === 'Escape') {
+                closePriceEditModal();
+            }
+        });
+
+        // Owner PIN Modal controls
+        function openPinModal() {
+            if (isOwnerUnlocked()) {
+                document.getElementById('owner-panel')?.classList.remove('hidden');
+                document.getElementById('owner-panel')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+            pinModalMode = 'unlock';
+            document.getElementById('pin-modal-title').textContent = 'Xác nhận chủ trang';
+            document.getElementById('pin-modal-desc').textContent = 'Nhập mã PIN của Linh Thuỳ để chỉnh trạng thái và bảng giá nhé ♡';
+            const input = document.getElementById('pin-input');
+            input.value = '';
+            input.placeholder = 'Nhập mã PIN...';
+            document.getElementById('pin-error').classList.add('hidden');
+            document.getElementById('pin-modal').classList.remove('hidden');
+            setTimeout(() => input.focus(), 50);
+        }
+
+        function openChangePinModal() {
+            if (!isOwnerUnlocked()) return;
+            pinModalMode = 'change';
+            document.getElementById('pin-modal-title').textContent = 'Đổi mã PIN quản trị';
+            document.getElementById('pin-modal-desc').textContent = 'Nhập mã PIN mới (4-12 số) để bảo vệ quyền chỉnh sửa của bạn:';
+            const input = document.getElementById('pin-input');
+            input.value = '';
+            input.placeholder = 'Nhập mã PIN mới...';
+            document.getElementById('pin-error').classList.add('hidden');
+            document.getElementById('pin-modal').classList.remove('hidden');
+            setTimeout(() => input.focus(), 50);
+        }
+
+        function closePinModal() {
+            document.getElementById('pin-modal').classList.add('hidden');
+        }
+
+        function submitPinModal() {
+            const input = document.getElementById('pin-input');
+            const errEl = document.getElementById('pin-error');
+            const val = (input.value || '').trim();
+
+            if (pinModalMode === 'unlock') {
+                if (val === getOwnerPin()) {
+                    try {
+                        sessionStorage.setItem(SESSION_OWNER_KEY, 'true');
+                    } catch {}
+                    closePinModal();
+                    const panel = document.getElementById('owner-panel');
+                    panel?.classList.remove('hidden');
+                    renderAllPrices();
+                    panel?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    showToast('Chào Linh Thuỳ! Đã mở khoá chỉnh trạng thái và bảng giá ♡');
+                } else {
+                    errEl.textContent = 'Mã PIN chưa đúng rồi cậu ơi!';
+                    errEl.classList.remove('hidden');
+                }
+            } else if (pinModalMode === 'change') {
+                if (val.length < 4) {
+                    errEl.textContent = 'Mã PIN cần ít nhất 4 ký tự nhé!';
+                    errEl.classList.remove('hidden');
+                    return;
+                }
+                try {
+                    localStorage.setItem(STORAGE_PIN_KEY, val);
+                } catch {}
+                closePinModal();
+                showToast('Đã cập nhật mã PIN mới thành công!');
+            }
+        }
+
+        function lockOwnerMode() {
+            try {
+                sessionStorage.removeItem(SESSION_OWNER_KEY);
+            } catch {}
+            document.getElementById('owner-panel')?.classList.add('hidden');
+            renderAllPrices();
+            showToast('Đã khoá chế độ chủ trang 🔒');
+        }
+
+        document.getElementById('pin-input')?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                submitPinModal();
+            } else if (e.key === 'Escape') {
+                closePinModal();
+            }
+        });
+
+        document.getElementById('secret-sparkle')?.addEventListener('dblclick', openPinModal);
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const msg = document.getElementById('toast-msg');
+            msg.textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2200);
+        }
+
+        function fallbackCopy(text) {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = text;
+            tempInput.setAttribute('readonly', '');
+            tempInput.style.position = 'absolute';
+            tempInput.style.left = '-9999px';
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand('copy');
+            } catch {}
+            document.body.removeChild(tempInput);
+        }
+
+        function copyText(text) {
+            if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+                navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+            } else {
+                fallbackCopy(text);
+            }
+            showToast('Đã sao chép: ' + text);
+        }
+
+        function showPage(sectionId) {
+            document.getElementById('home-menu').classList.add('hidden');
+            ['price-section', 'tos-section', 'order-section'].forEach(id => {
+                document.getElementById(id).classList.toggle('hidden', id !== sectionId);
+            });
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function showHome() {
+            ['price-section', 'tos-section', 'order-section'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById('home-menu').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function filterPrices(type) {
+            const chibi = document.getElementById('block-chibi');
+            const normal = document.getElementById('block-normal');
+            chibi.classList.toggle('hidden', type === 'normal');
+            normal.classList.toggle('hidden', type === 'chibi');
+
+            document.querySelectorAll('.filter-tab').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-pastel-600', 'shadow-sm');
+                btn.classList.add('text-cocoa/70');
+            });
+            const active = document.getElementById('tab-' + type);
+            active.classList.add('bg-white', 'text-pastel-600', 'shadow-sm');
+            active.classList.remove('text-cocoa/70');
+        }
+
+        const form = document.getElementById('comm-form');
+        const statusEl = document.getElementById('form-status');
+        form?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            statusEl.textContent = 'Đang gửi thông báo về Gmail...';
+            try {
+                const res = await fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (res.ok) {
+                    statusEl.textContent = 'Hoàn tất rồi! Thông báo đơn đã gửi về Gmail của cậu nhé ♡';
+                    form.reset();
+                } else {
+                    statusEl.textContent = 'Có lỗi khi gửi biểu mẫu, cậu thử gửi lại hoặc kiểm tra cấu hình Formspree của ptl31052010@gmail.com nha!';
+                }
+            } catch {
+                statusEl.textContent = 'Không kết nối được mạng, cậu thử lại sau nhé!';
+            }
+        });
+
+        initAppState();
+    </script>
+</body>
+</html>
